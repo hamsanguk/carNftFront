@@ -1,40 +1,48 @@
 // src/pages/VehicleDetail.tsx
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useHistory } from '../contexts/HistoryContext';
+import { usePurchase } from '../contexts/PurchaseContext';
+import { useWallet } from '../hooks/useWallet';
 import VehicleHistoryTable from '../components/VehicleHistoryTable';
 
-const mockVehicle = {
-  vin: 'KMHEC41DAD0123456',
-  manufacturer: 'Hyundai',
-  mileage: 78400,
-  tokenId: 1,
-};
-
-const mockHistories = [
-  {
-    date: '2024-11-03',
-    type: '정비' as const,
-    description: '엔진 오일 교체',
-    workshop: '한빛 정비소',
-  },
-  {
-    date: '2025-01-15',
-    type: '사고' as const,
-    description: '후방 추돌 사고, 범퍼 교체',
-    workshop: 'ABC Auto',
-  },
-];
-
 const VehicleDetail = () => {
+  const { tokenId } = useParams(); // URL의 tokenId
+  const { histories } = useHistory();
+  const { addRequest } = usePurchase();
+  const { account, connected } = useWallet();
+
+  const myHistories = histories.filter((h) => h.tokenId === Number(tokenId));
+
+  const handlePurchaseRequest = () => {
+    if (!connected || !account) {
+      alert('지갑을 먼저 연결해주세요.');
+      return;
+    }
+
+    addRequest({
+      tokenId: Number(tokenId),
+      buyerAddress: account,
+      date: new Date().toISOString().slice(0, 10),
+    });
+    alert('구매 요청이 전송되었습니다.');
+  };
+  
   return (
     <div style={{ padding: '1rem' }}>
-      <h2>차량 상세 정보</h2>
-      <p><strong>제조사:</strong> {mockVehicle.manufacturer}</p>
-      <p><strong>VIN:</strong> {mockVehicle.vin}</p>
-      <p><strong>주행거리:</strong> {mockVehicle.mileage.toLocaleString()} km</p>
-      <p><strong>Token ID:</strong> #{mockVehicle.tokenId}</p>
+      <h2>차량 상세 정보 (Token ID: {tokenId})</h2>
 
       <h3>이력 정보</h3>
-      <VehicleHistoryTable histories={mockHistories} />
+      {myHistories.length === 0 ? (
+        <p>등록된 이력이 없습니다.</p>
+      ) : (
+        <VehicleHistoryTable histories={myHistories} />
+      )}
+
+      <br />
+      <button onClick={handlePurchaseRequest} disabled={!connected}>
+        {connected ? '구매 요청' : '지갑 연결 필요'}
+      </button>
     </div>
   );
 };

@@ -1,12 +1,17 @@
 import React from 'react';
 import AppRouter from './routes/AppRouter';
-import Header from './components/Header';
+import { HistoryProvider } from './contexts/HistoryContext';
+import { PurchaseProvider } from './contexts/PurchaseContext';
 import Home from './pages/Home';
 import './App.css';
 
 function App() {
   return (
-    <AppRouter />
+    <HistoryProvider>
+      <PurchaseProvider>
+        <AppRouter />
+      </PurchaseProvider>
+    </HistoryProvider>
   );
 }
 

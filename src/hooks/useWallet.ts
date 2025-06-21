@@ -18,7 +18,6 @@ export const useWallet = () => {
       alert('MetaMask가 설치되어 있지 않습니다.');
       return;
     }
-
     try {
       const _provider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await _provider.send('eth_requestAccounts', []);
@@ -33,7 +32,7 @@ export const useWallet = () => {
     }
   };
 
-  const disconnectWallet = () => {
+  const disconnectWallet = () => {//메타마스크 조정이 아니면 삭제
     setAccount(null);
     setProvider(null);
     setChainId(null);
@@ -60,6 +59,27 @@ export const useWallet = () => {
       window.ethereum.removeListener('chainChanged', handleChainChanged);
     };
   }, []);
+
+  useEffect(() => {
+    const checkInitialConnection = async () => {
+      if (!window.ethereum) return;
+  
+      const _provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts: string[] = await _provider.send('eth_accounts', []);
+  
+      if (accounts.length > 0) {
+        const network = await _provider.getNetwork();
+  
+        setProvider(_provider);
+        setAccount(accounts[0]); // ✅ string만 들어가도록 명확히 함
+        setChainId(Number(network.chainId));
+        setConnected(true);
+      }
+    };
+  
+    checkInitialConnection();
+  }, []);
+  
 
   return {
     account,

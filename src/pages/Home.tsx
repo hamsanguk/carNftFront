@@ -2,7 +2,7 @@
 import React from 'react';
 import VehicleCard from '../components/VehicleCard';
 
-const mockVehicles = [
+const mockVehicles = [//db에서 가져올 mapping data
   {
     vin: 'KMHEC41DAD0123456',
     manufacturer: 'Hyundai',
@@ -26,7 +26,7 @@ const mockVehicles = [
 const Home = () => {
   return (
     <div style={{ padding: '1rem' }}>
-      <h2>차량 목록</h2>
+      <h2>Veh</h2>
       {mockVehicles.map((v, idx) => (
         <VehicleCard key={idx} {...v} />
       ))}
