@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import {useParams} from 'react-router-dom'
 import { useHistory } from '../contexts/HistoryContext';
+import MintForm from '../components/MintForm';
 
 interface Request {
   vin: string;
@@ -53,7 +54,7 @@ const Workshop = () => {
   
   return (
     <div style={{ padding: '1rem' }}>
-      <h2>차량 등록 요청</h2>
+      <h2>차량 등록 요청 </h2> 
       <input name="vin" value={form.vin} onChange={handleChange} placeholder="VIN" /><br />
       <input name="manufacturer" value={form.manufacturer} onChange={handleChange} placeholder="제조사" /><br />
       <input name="mileage" value={form.mileage} onChange={handleChange} placeholder="주행거리" type="number" /><br />
@@ -66,6 +67,7 @@ const Workshop = () => {
           <li key={i}>{v.vin} / {v.manufacturer} / {v.mileage}km</li>
         ))}
       </ul>
+      <MintForm/>
       <h2>차량 이력 등록</h2>
         <input name="tokenId" value={historyForm.tokenId} onChange={handleHistoryChange} placeholder="Token ID" /><br />
         <input name="date" value={historyForm.date} onChange={handleHistoryChange} placeholder="YYYY-MM-DD" /><br />
