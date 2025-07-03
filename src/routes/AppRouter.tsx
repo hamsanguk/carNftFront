@@ -18,29 +18,31 @@ const AppRouter = () => {
     <Router>
       <Header />
       <Routes>
+        {/* 모든 사용자 접근 가능 */}
         <Route path="/" element={<Home />} />
         <Route path="/vehicle/:tokenId" element={<VehicleDetail />} />
 
-        {/* 역할 제한: admin만 접근 가능 */}
+        {/* 관리자 전용 페이지 */}
         <Route
           path="/admin"
           element={
-            <RequireRole role="admin" current={role}>
+            <RequireRole required="admin" current={role}>
               <Admin />
             </RequireRole>
           }
         />
 
-        {/* 역할 제한: workshop만 접근 가능 */}
+        {/* 정비소 전용 페이지 */}
         <Route
           path="/workshop"
           element={
-            <RequireRole role="workshop" current={role}>
+            <RequireRole required="workshop" current={role}>
               <Workshop />
             </RequireRole>
           }
         />
 
+        {/* 잘못된 경로 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

@@ -1,23 +1,35 @@
-import { ethers } from 'ethers';
-import AccessControlABI from '../abi/AccessControlManager.json';
+import { Contract, Provider, Signer } from 'ethers';
+import VehicleNFTAbi from '../abi/VehicleNFT.json';
 
-const CA = process.env.REACT_APP_ACCESS_CONTROL_CA;
-const WORKSHOP_ROLE = ethers.keccak256(ethers.toUtf8Bytes('WORKSHOP_ROLE'));
-const ADMIN_ROLE = ethers.keccak256(ethers.toUtf8Bytes('ADMIN_ROLE'));
+const CA = process.env.REACT_APP_VEHICLE_NFT_ADDRESS;
 
-export const getAccessControlContract = (providerOrSigner: ethers.Provider | ethers.Signer) => {
-  if (!CA) throw new Error('AccessControl contract address not set');
-  return new ethers.Contract(CA, AccessControlABI.abi, providerOrSigner);
+/**
+ * VehicleNFT 컨트랙트를 얻어옵니다.
+ * @param providerOrSigner ethers Provider 또는 Signer
+ */
+export const getVehicleNFTContract = (
+  providerOrSigner: Provider | Signer
+): Contract => {
+  if (!CA) {
+    throw new Error('VehicleNFT contract address not set');
+  }
+  return new Contract(CA, VehicleNFTAbi, providerOrSigner);
 };
 
+/**
+ * 주어진 주소의 역할을 확인합니다.
+ * - admins 매핑을 먼저 확인
+ * - workshops 매핑을 그다음 확인
+ * - 둘 다 아니면 'user'
+ */
 export const checkRole = async (
-  provider: ethers.Provider,
+  provider: Provider,
   address: string
 ): Promise<'admin' | 'workshop' | 'user'> => {
-  const contract = getAccessControlContract(provider);
-  const isAdmin = await contract.hasRole(ADMIN_ROLE, address);
+  const contract = getVehicleNFTContract(provider);
+  const isAdmin: boolean = await contract.admins(address);
   if (isAdmin) return 'admin';
-  const isWorkshop = await contract.hasRole(WORKSHOP_ROLE, address);
+  const isWorkshop: boolean = await contract.workshops(address);
   if (isWorkshop) return 'workshop';
   return 'user';
 };

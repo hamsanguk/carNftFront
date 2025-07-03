@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 
 declare global {
   interface Window {
@@ -7,20 +7,26 @@ declare global {
   }
 }
 
+/**
+ * MetaMask 지갑 연결 상태를 관리하는 커스텀 훅
+ */
 export const useWallet = () => {
   const [account, setAccount] = useState<string | null>(null);
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [provider, setProvider] = useState<BrowserProvider | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [connected, setConnected] = useState<boolean>(false);
 
+  /**
+   * MetaMask 연결 요청
+   */
   const connectWallet = async () => {
     if (!window.ethereum) {
       alert('MetaMask가 설치되어 있지 않습니다.');
       return;
     }
     try {
-      const _provider = new ethers.BrowserProvider(window.ethereum);
-      const accounts = await _provider.send('eth_requestAccounts', []);
+      const _provider = new BrowserProvider(window.ethereum);
+      const accounts: string[] = await _provider.send('eth_requestAccounts', []);
       const network = await _provider.getNetwork();
 
       setProvider(_provider);
@@ -32,13 +38,17 @@ export const useWallet = () => {
     }
   };
 
-  const disconnectWallet = () => {//메타마스크 조정이 아니면 삭제
+  /**
+   * 상태 초기화 (연결 해제)
+   */
+  const disconnectWallet = () => {
     setAccount(null);
     setProvider(null);
     setChainId(null);
     setConnected(false);
   };
 
+  // 계정 또는 네트워크 변경 이벤트 핸들러
   useEffect(() => {
     if (!window.ethereum) return;
 
@@ -47,8 +57,8 @@ export const useWallet = () => {
       else setAccount(accounts[0]);
     };
 
-    const handleChainChanged = (_chainId: string) => {
-      window.location.reload(); //network변경시 새로고침
+    const handleChainChanged = () => {
+      window.location.reload();
     };
 
     window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -60,26 +70,25 @@ export const useWallet = () => {
     };
   }, []);
 
+  // 초기 연결 상태 확인
   useEffect(() => {
     const checkInitialConnection = async () => {
       if (!window.ethereum) return;
-  
-      const _provider = new ethers.BrowserProvider(window.ethereum);
+
+      const _provider = new BrowserProvider(window.ethereum);
       const accounts: string[] = await _provider.send('eth_accounts', []);
-  
+
       if (accounts.length > 0) {
         const network = await _provider.getNetwork();
-  
         setProvider(_provider);
-        setAccount(accounts[0]); // ✅ string만 들어가도록 명확히 함
+        setAccount(accounts[0]);
         setChainId(Number(network.chainId));
         setConnected(true);
       }
     };
-  
+
     checkInitialConnection();
   }, []);
-  
 
   return {
     account,
