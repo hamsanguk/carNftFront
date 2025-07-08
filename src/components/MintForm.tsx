@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useWallet } from '../hooks/useWallet';
+import { useWallet } from '../contexts/WalletContext';
 import { getVehicleNFTContract } from '../utils/contract';
 import { Log } from 'ethers';
 

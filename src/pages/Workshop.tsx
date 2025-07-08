@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TradeHistory from '../components/TradeHistory';
 import { mintVehicle, Vehicle } from '../api/api';
-import { useWallet } from '../hooks/useWallet';
+import { useWallet } from '../contexts/WalletContext';
 
 const Workshop = () => {
   const [vin, setVin] = useState('');

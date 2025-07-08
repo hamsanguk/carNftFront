@@ -1,7 +1,7 @@
 // src/components/VehicleCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useWallet } from '../hooks/useWallet';
+import { useWallet } from '../contexts/WalletContext';
 import { usePurchase } from '../contexts/PurchaseContext';
 
 interface VehicleCardProps {

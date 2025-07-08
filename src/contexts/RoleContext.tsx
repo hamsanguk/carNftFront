@@ -1,28 +1,30 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useWallet } from '../contexts/WalletContext';
+import { useRole as useRoleHook } from '../hooks/useRole';
 
 type Role = 'admin' | 'workshop' | 'user' | 'guest';
 
 interface RoleContextType {
   role: Role;
-  setRole: (role: Role) => void;
 }
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
-  const [role, setRole] = useState<Role>('guest');
+  const { account } = useWallet();
+  const role = useRoleHook(account);
 
   return (
-    <RoleContext.Provider value={{ role, setRole }}>
+    <RoleContext.Provider value={{ role }}>
       {children}
     </RoleContext.Provider>
   );
 };
 
-export const useMockRole = () => {
+export const useRole = () => {
   const context = useContext(RoleContext);
-  if (!context) {
-    throw new Error('useMockRole must be used within a RoleProvider');
+  if (context === undefined) {
+    throw new Error('useRole must be used within a RoleProvider');
   }
   return context;
 };

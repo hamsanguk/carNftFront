@@ -7,12 +7,12 @@ import VehicleDetail from '../pages/VehicleDetail';
 import NotFound from '../pages/NotFound';
 import Header from '../components/Header';
 import RequireRole from '../components/RequireRole';
-import { useWallet } from '../hooks/useWallet';
-import { useRole } from '../hooks/useRole';
+import { useWallet } from '../contexts/WalletContext';
+import { useRole } from '../contexts/RoleContext';
 
 const AppRouter = () => {
-  const { account } = useWallet();
-  const role = useRole(account); // 'admin' | 'workshop' | 'user' | 'guest'
+  const { role } = useRole(); // 컨텍스트에서 role 직접 가져오기
+
 
   return (
     <Router>

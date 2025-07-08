@@ -1,7 +1,7 @@
 // src/hooks/useRole.ts
 import { useEffect, useState } from 'react';
 import { getVehicleNFTContract } from '../utils/contract';
-import { useWallet } from './useWallet';
+import { useWallet } from '../contexts/WalletContext';
 
 /**
  * 지갑 주소에 따른 역할(admin, workshop, user, guest)을 반환하는 커스텀 훅
@@ -30,10 +30,8 @@ export const useRole = (address: string | null) => {
           setRole('workshop');
           return;
         }
-
         setRole('user');
       } catch (error) {
-        console.error('역할 조회 실패:', error);
         setRole('guest');
       }
     };

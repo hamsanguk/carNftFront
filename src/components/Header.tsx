@@ -1,12 +1,12 @@
 // src/components/Header.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useWallet } from '../hooks/useWallet';
-import { useRole } from '../hooks/useRole';
+import { useWallet } from '../contexts/WalletContext';
+import { useRole } from '../contexts/RoleContext'; // 컨텍스트에서 useRole 가져오기
 
 const Header = () => {
   const { account, connected, connectWallet, disconnectWallet } = useWallet();
-  const role = useRole(account);
+  const { role } = useRole(); // 컨텍스트를 통해 role 상태 직접 사용
 
   const shortenAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
