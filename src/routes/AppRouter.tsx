@@ -18,9 +18,9 @@ const AppRouter = () => {
     <Router>
       <Header />
       <Routes>
-        {/* 모든 사용자 접근 가능 */}
+        {/* 모든 사용자 접근 가능*/}
         <Route path="/" element={<Home />} />
-        <Route path="/vehicle/:tokenId" element={<VehicleDetail />} />
+        <Route path="/vehicles/:tokenId" element={<VehicleDetail />} />
 
         {/* 관리자 전용 페이지 */}
         <Route

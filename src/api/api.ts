@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { SyntaxKind } from 'typescript';
 
 // 환경변수로 베이스 URL 설정 (예: REACT_APP_API_URL)
 const API = axios.create({

@@ -7,13 +7,13 @@ import { useHistory } from '../contexts/HistoryContext';
 import { usePurchase } from '../contexts/PurchaseContext';
 import { useWallet } from '../contexts/WalletContext';
 import VehicleHistoryTable from '../components/VehicleHistoryTable';
-import * as abi from '../abi/VehicleNFT.json'
+import abi from '../abi/VehicleNFT.json'
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000'
 
 type Vehicle = {
   vin: string; manufacturer: string;
-  mileage:number; tokenId:number;
+tokenId:number;     //mileage를 없엤다 에러시 참고
 };
 type TradeRequest = {
   id:string; token_id:string;
@@ -21,7 +21,7 @@ type TradeRequest = {
 };
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_VEHICLE_NFT_CA!
-const ABI = abi; //             이렇게 가져오는거 맞나?
+const ABI = abi
 
 
 const VehicleDetail = () => {
@@ -82,6 +82,7 @@ const VehicleDetail = () => {
       alert('거래가 블록체인에 기록되었습니다.');
       window.location.reload();
     } catch (e) {
+      console.error(e);
       alert('거래 실행에 실패했습니다.');
     } finally {
       setTxPending(false);
@@ -99,7 +100,6 @@ const VehicleDetail = () => {
       <h2>차량 상세</h2>
       <p><strong>VIN:</strong> {vehicle.vin}</p>
       <p><strong>제조사:</strong> {vehicle.manufacturer}</p>
-      <p><strong>주행거리:</strong> {vehicle.mileage.toLocaleString()} km</p>
       <p><strong>Token ID:</strong> {vehicle.tokenId}</p>
 
       <div>
@@ -112,7 +112,7 @@ const VehicleDetail = () => {
             <p>거래 요청 상태: <b>{reqStatus}</b></p>
             {canTrade && (
               <button onClick={handleTrade} disabled={txPending}>
-                {txPending ? '거래 진행 중...' : '거래 실행'}
+                {txPending ? '관리자판단중...' : '거래 실행'}
               </button>
             )}
           </div>
@@ -123,3 +123,4 @@ const VehicleDetail = () => {
 };
 
 export default VehicleDetail;
+
