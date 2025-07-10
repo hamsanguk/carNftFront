@@ -13,7 +13,7 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000'
 
 type Vehicle = {
   vin: string; manufacturer: string;
-tokenId:number;     //mileage를 없엤다 에러시 참고
+tokenId:number; ownerOnChain: string;    //mileage를 없엤다 에러시 참고
 };
 type TradeRequest = {
   id:string; token_id:string;
@@ -22,7 +22,6 @@ type TradeRequest = {
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_VEHICLE_NFT_CA!
 const ABI = abi
-
 
 const VehicleDetail = () => {
   const { tokenId } = useParams(); // URL의 tokenId
@@ -36,6 +35,7 @@ const VehicleDetail = () => {
   const [txPending, setTxPending] = useState(false);
 
   const myHistories = histories.filter((h) => h.tokenId === Number(tokenId));
+ 
   //거래 요청 상태 조회
   useEffect(() => {
     if (!tokenId) return;
@@ -43,14 +43,16 @@ const VehicleDetail = () => {
       .then(res => setVehicle(res.data))
       .finally(() => setLoading(false));
   }, [tokenId]);
-//구매 요청 전송
-  useEffect(()=>{
-    if (!tokenId|| !account) return;
-    axios.get(`${API_BASE}/trade/request?token_id=${tokenId}&requester=${account}`)
-    .then(res=> setTradeReq(res.data[0] || null))
-  },[tokenId, account])
 
+
+  useEffect(()=>{
+    if (!tokenId) return;
+    axios.get(`${API_BASE}/trade/request?token_id=${tokenId}`)
+      .then(res=> setTradeReq(res.data[0] || null))
+  },[tokenId])
+//구매 요청을 전송
   const handlePurchase = async () => {
+    console.log('구매자가 맞나?',account)
     if (!connected || !account) {
       alert('지갑 연결이 필요합니다.');
       return;
@@ -62,8 +64,8 @@ const VehicleDetail = () => {
       });
       alert('구매 요청이 전송되었습니다.');
       window.location.reload();
-    } catch {
-      alert('이미 요청했거나, 오류가 발생했습니다.');
+    } catch(err) {
+      alert(`이미 요청했거나, 오류가 발생했습니다.${err}`);
     }
   };
    // 거래 실행 (safeTransferFrom)
@@ -71,20 +73,21 @@ const VehicleDetail = () => {
     if (!provider || !account || !vehicle) return;
     setTxPending(true);
     try {
-      // 판매자 주소 조회
-      const ownerRes = await axios.get(`${API_BASE}/vehicles/${tokenId}/owner`);
-      const from = ownerRes.data.owner;
-      // ethers.js 컨트랙트 연결
-      const signer =await provider.getSigner();
+      const from = account,//from===to여서 해결방안으로 account -> vehicle.ownerOnchain
+      to = tradeReq?.requester,
+      tokenId = vehicle.tokenId;
+      console.log('from',from,'to',to, 'tradeReq',tradeReq, 'vehicle',vehicle)
+      const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-      const tx = await contract.safeTransferFrom(from, account, vehicle.tokenId);
+
+      const tx = await contract.safeTransferFrom(from, to, tokenId)
       await tx.wait();
-      alert('거래가 블록체인에 기록되었습니다.');
+
+      alert('거래가 블록체인에 기록되었습니다.')
       window.location.reload();
-    } catch (e) {
-      console.error(e);
-      alert('거래 실행에 실패했습니다.');
-    } finally {
+    }catch(err){
+      console.error(err)
+    }finally{
       setTxPending(false);
     }
   };
@@ -93,7 +96,14 @@ const VehicleDetail = () => {
 
   // 상태 표시
   const reqStatus = tradeReq?.status;
-  const canTrade = reqStatus === 'approved';
+  const isApproved = reqStatus === 'approved';
+
+  const isOwner =
+  account &&
+  vehicle &&
+  vehicle.ownerOnChain &&
+  account.toLowerCase() === vehicle.ownerOnChain.toLowerCase();
+
   
   return (
     <div style={{ padding: '1rem' }}>
@@ -110,17 +120,17 @@ const VehicleDetail = () => {
         ) : (
           <div>
             <p>거래 요청 상태: <b>{reqStatus}</b></p>
-            {canTrade && (
-              <button onClick={handleTrade} disabled={txPending}>
-                {txPending ? '관리자판단중...' : '거래 실행'}
-              </button>
-            )}
+           {isOwner && isApproved && (
+            <button onClick={handleTrade} disabled={txPending}>
+              {txPending ? '거래 진행 중...' : '거래 실행'}
+            </button>
+          )}
           </div>
         )}
       </div>
     </div>
   );
 };
-
 export default VehicleDetail;
+
 
