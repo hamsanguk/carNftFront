@@ -1,5 +1,7 @@
 // src/pages/Admin.tsx
 import React, { useState, useEffect } from 'react';
+import { useWallet } from '../contexts/WalletContext';
+import MintVehicleForm from '../components/MIntVehicleForm'
 import axios from 'axios';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -15,6 +17,7 @@ type TradeRequest = {
 const Admin = () => {
   const [requests, setRequests] = useState<TradeRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const { account } = useWallet();
 
   // 구매 요청 목록 불러오기
   const fetchRequests = async () => {
@@ -53,6 +56,7 @@ const Admin = () => {
 
   return (
     <div style={{ padding: '1rem' }}>
+      
       <h2>구매 요청 관리</h2>
       {loading ? (
         <div>로딩 중...</div>
@@ -92,6 +96,8 @@ const Admin = () => {
           </tbody>
         </table>
       )}
+      <h2>관리자용 차량 민팅</h2>
+      <MintVehicleForm ownerAddress = {account || ''} approved={true}/>
     </div>
   );
 };
