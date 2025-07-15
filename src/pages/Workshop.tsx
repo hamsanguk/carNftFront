@@ -1,26 +1,27 @@
 import React, { useState,useEffect } from 'react';
 import TradeHistory from '../components/TradeHistory';
 import MintVehicleForm from '../components/MIntVehicleForm';
+import MintRequestForm from '../components/MintRequestForm';
 import { mintVehicle, Vehicle } from '../api/api';
 import { useWallet } from '../contexts/WalletContext';
 import axios from 'axios';
 
 const Workshop = () => {
   const { account, connectWallet } = useWallet();
-
   const [vin, setVin] = useState('');
   const [manufacturer, setManufacturer] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Vehicle | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [approved, setApproved] = useState(false);
+  const [approvedVins, setApprovedVins] = useState<string[]>([]);
 
   useEffect(() => {
     // 관리자 승인 여부를 조회
     async function fetchApproval() {
       if (!account) return setApproved(false);
       try {
-        const res = await axios.get(`/api/vin-requests?workshop=${account}&status=approved`);
+        const res = await axios.get(`http://localhost:3000/api/vin-requests?workshop=${account}&status=approved`);
         setApproved(res.data?.length > 0); // 승인된 항목이 있으면 true 
       } catch {
         setApproved(false);
@@ -29,24 +30,43 @@ const Workshop = () => {
     fetchApproval();
   }, [account]);
 
+  useEffect(() => {
+    async function fetchApprovedVins() {
+      if (!account) {
+        setApprovedVins([]);
+        return;
+      }
+      try {
+        // 승인된 요청 리스트를 받아와서 배열로 저장
+        const res = await axios.get(`http://localhost:3000/api/vin-requests?workshop=${account}&status=approved`);
+        // 예시: [{vin: "...", manufacturer: "...", ...}]
+        setApprovedVins(res.data.map((r: any) => r.vin));
+      } catch {
+        setApprovedVins([]);
+      }
+    }
+    fetchApprovedVins();
+  }, [account]);
+
   return (
     <div style={{ padding: '1rem' }}>
-      <MintVehicleForm ownerAddress={account || ''} approved={approved}/>
-      <h2>VIN 기반 NFT 민팅</h2>
-      <div>
-        <input
-          placeholder="VIN"
-          value={vin}
-          onChange={e => setVin(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          placeholder="제조사"
-          value={manufacturer}
-          onChange={e => setManufacturer(e.target.value)}
-        />
-      </div>
+     <h2>minting(workshop page)</h2>
+    
+        <div>
+          <p style={{ color: 'green' }}>관리자 승인된 VIN으로만 민팅할 수 있습니다.</p>
+          <MintVehicleForm
+            ownerAddress={account || ''}
+            workshopAddress = {account || ''}
+            approved={true}
+            allowedVins={approvedVins} // 폼에서 VIN 선택을 제한할 수 있음
+          />
+        </div>
+ 
+        <div>
+          <p style={{ color: 'orange' }}>아직 관리자 승인 대기 중입니다.<br />아래 폼으로 민팅 요청을 제출하세요.</p>
+          <MintRequestForm workshopAddress={account || ''} />
+        </div>
+   
     </div>
   );
 };

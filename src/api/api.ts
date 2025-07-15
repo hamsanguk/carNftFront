@@ -26,12 +26,13 @@ export async function mintVehicle(
   vin: string,
   manufacturer: string,
   ownerAddress: string,
+  workshopAddress: string,
   metadataUri:string,
 ): Promise<Vehicle> {
   const response = await API.post(//이 구조가 postman test용 구조가 아닌지 확인
     '/vehicles/mint',
     { vin, manufacturer, metadataUri },
-    { headers: { 'x-owner-address': ownerAddress } },
+    { headers: { 'x-owner-address': ownerAddress, 'x-workshop-address': workshopAddress,} },
   );
   return response.data.vehicle;
 }
