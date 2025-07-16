@@ -6,8 +6,10 @@ import { useParams } from 'react-router-dom';
 import { useHistory } from '../contexts/HistoryContext';
 import { usePurchase } from '../contexts/PurchaseContext';
 import { useWallet } from '../contexts/WalletContext';
+import { useIsWorkshopOrAdmin } from '../hooks/useIsWorkshopOrAdmin';
 import VehicleHistoryTable from '../components/VehicleHistoryTable';
 import abi from '../abi/VehicleNFT.json'
+import HistoryInput  from '../components/HistoryInput'
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000'
 
@@ -33,8 +35,11 @@ const VehicleDetail = () => {
   const [tradeReq, setTradeReq] = useState<TradeRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [txPending, setTxPending] = useState(false);
-
   const myHistories = histories.filter((h) => h.tokenId === Number(tokenId));
+
+  
+
+
  
   //거래 요청 상태 조회
   useEffect(() => {
@@ -49,7 +54,7 @@ const VehicleDetail = () => {
     if (!tokenId) return;
     axios.get(`${API_BASE}/trade/request?token_id=${tokenId}`)
       .then(res=> setTradeReq(res.data[0] || null))
-  },[tokenId])
+  },[tokenId]);
 //구매 요청을 전송
   const handlePurchase = async () => {
     console.log('구매자가 맞나?',account)
@@ -107,6 +112,7 @@ const VehicleDetail = () => {
   
   return (
     <div style={{ padding: '1rem' }}>
+    
       <h2>차량 상세</h2>
       <p><strong>VIN:</strong> {vehicle.vin}</p>
       <p><strong>제조사:</strong> {vehicle.manufacturer}</p>
@@ -128,6 +134,9 @@ const VehicleDetail = () => {
           </div>
         )}
       </div>
+      <hr/>
+      <HistoryInput tokenId={vehicle.tokenId} />      
+      
     </div>
   );
 };
