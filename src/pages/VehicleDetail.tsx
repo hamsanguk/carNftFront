@@ -10,12 +10,14 @@ import { useIsWorkshopOrAdmin } from '../hooks/useIsWorkshopOrAdmin';
 import VehicleHistoryTable from '../components/VehicleHistoryTable';
 import abi from '../abi/VehicleNFT.json'
 import HistoryInput  from '../components/HistoryInput'
+import OwnerHistoryTable from '../components/OwnerHistoryTable';
+
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000'
 
 type Vehicle = {
   vin: string; manufacturer: string;
-tokenId:number; ownerOnChain: string;    //mileage를 없엤다 에러시 참고
+tokenId:number; ownerOnChain: string;    //mileage를 없애놔서 에러나면 참고
 };
 type TradeRequest = {
   id:string; token_id:string;
@@ -36,6 +38,7 @@ const VehicleDetail = () => {
   const [loading, setLoading] = useState(true);
   const [txPending, setTxPending] = useState(false);
   const myHistories = histories.filter((h) => h.tokenId === Number(tokenId));
+  const [ownerHistories, setOwnerHistories] = useState([]);
 
   
 
@@ -55,6 +58,8 @@ const VehicleDetail = () => {
     axios.get(`${API_BASE}/trade/request?token_id=${tokenId}`)
       .then(res=> setTradeReq(res.data[0] || null))
   },[tokenId]);
+  
+
 //구매 요청을 전송
   const handlePurchase = async () => {
     console.log('구매자가 맞나?',account)
@@ -135,7 +140,8 @@ const VehicleDetail = () => {
         )}
       </div>
       <hr/>
-      <HistoryInput tokenId={vehicle.tokenId} />      
+      <HistoryInput tokenId={vehicle.tokenId} /> 
+      <OwnerHistoryTable histories={ownerHistories} myAddress={account!}/>     
       
     </div>
   );
