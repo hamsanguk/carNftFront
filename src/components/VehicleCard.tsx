@@ -1,6 +1,7 @@
 // src/components/VehicleCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './css/VehicleCard.css';
 
 interface VehicleCardProps {
   vin: string;
@@ -10,13 +11,15 @@ interface VehicleCardProps {
   ownerOnChain: string | null;
   mintedAt: string;
   tokenUri?: string | null;
+  forSale:boolean;
 }
 
 const VehicleCard: React.FC<VehicleCardProps> = ({
   vin, manufacturer, tokenId, ownerDb, ownerOnChain, mintedAt, tokenUri,
 }) => {
   return (
-    <div style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '1rem' }}>
+    
+    <div className="vehicle-card">
       <h3>{manufacturer}</h3>
       <p><strong>VIN:</strong> {vin}</p>
       <p><strong>Token ID:</strong> #{tokenId}</p>

@@ -11,8 +11,7 @@ const HistoryInput: React.FC<{ tokenId: number }> = ({ tokenId }) => {
   return (
     <div>
       <h1>Vehicle #{tokenId}</h1>
-      <p>isAllow{isAllowed}</p>
-      {/* 이력 등록 권한이 있는 경우에만 폼 보여짐 */}
+     {/* 이력 등록 권한이 있는 경우에만 폼 보여짐 */}
         {isAllowed && (
             <VehicleHistoryForm
             tokenId={tokenId}
@@ -24,5 +23,4 @@ const HistoryInput: React.FC<{ tokenId: number }> = ({ tokenId }) => {
     </div>
   );
 };
-
 export default HistoryInput;

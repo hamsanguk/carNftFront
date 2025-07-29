@@ -41,8 +41,8 @@ const OwnerHistoryTable: React.FC<Props> = ({ histories, myAddress }) => {
               background:
                 myAddress &&
                 h.ownerAddress.toLowerCase() === myAddress.toLowerCase()
-                  ? '#ffeebb'
-                  : undefined,
+                    ? '#ffeebb'
+                    : undefined,
             }}
           >
             <td>{i + 1}</td>

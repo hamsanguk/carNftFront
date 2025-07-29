@@ -30,7 +30,7 @@ const VehicleHistoryList: React.FC<{ tokenId: number }> = ({ tokenId }) => {
   }, [provider, tokenId]);
 
   if (loading) return <p>로딩 중...</p>;
-  if (items.length === 0) return <p>등록된 이력이 없습니다.</p>;
+  if (items.length === 0) return <p>등록된 정비,유지 이력이 없습니다.</p>;
 
   return (
     <ul>
