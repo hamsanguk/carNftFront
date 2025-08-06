@@ -7,9 +7,11 @@ import { useHistory } from '../contexts/HistoryContext';
 import { usePurchase } from '../contexts/PurchaseContext';
 import { useWallet } from '../contexts/WalletContext';
 import { useIsWorkshopOrAdmin } from '../hooks/useIsWorkshopOrAdmin';
-import abi from '../abi/VehicleNFT.json'
+import abi from '../abi/VehicleNFT.json';
 import HistoryInput  from '../components/HistoryInput'
 import OwnerHistoryTable from '../components/OwnerHistoryTable';
+import Footer from '../components/Footer';
+import styles from './css/VehicleDetail.module.css'
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -138,45 +140,56 @@ const VehicleDetail = () => {
 
   const showPurchaseButton = !tradeReq || tradeReq.status === 'rejected';
   
-  return (
-    <div style={{ padding: '1rem' }}>
-      <h2>차량 상세</h2>
-      <p><strong>VIN:</strong> {vehicle.vin}</p>
-      <p><strong>제조사:</strong> {vehicle.manufacturer}</p>
-      <p><strong>Token ID:</strong> {vehicle.tokenId}</p>
+ 
 
-      { isOwner && (
+return (
+  <div className={styles.wrap}>
+  <div className={styles.container}>
+    <h2 className={styles.title}>차량 상세</h2>
+    <p className={styles.info}><strong>VIN:</strong> {vehicle.vin}</p>
+    <p className={styles.info}><strong>제조사:</strong> {vehicle.manufacturer}</p>
+    <p className={styles.info}><strong>Token ID:</strong> {vehicle.tokenId}</p>
+    {/*기존의 엔카 사이트의 nft차량이라 명시된 차량을 누르고  나의 프로젝트 사이트로 넘어오게 되었다. 
+    나의 프로젝트와 기존 엔카 사이트의 연결점으로 무엇으로 할지 link url 
+    원본링크+해시인증 방식 메타데이터에 엔카 매물 url과 함께 해당 매물의 주요 정보를 해시값으로 남긴다
+    */}
+{/*페이지 진입시 사이트가 제공하는 거래의 흐름을 따르지않고 개인키만 가지고 있다는 이유로 개인간 거래시 이후 일어나는 불이익은 책임 않진다.*/}
+{/*사이드배너가 너무 비었는데 이곳에는 나의 사이트를 소개, 특성, 웹3 프로젝트상 일어날 수 있는 주의사항을 표시하는 것도 나쁘지 않을듯 하다.
+프로젝트의 당위성을 부여하여 명분을 설명하는 것이 중요하다,
+ui 엔카에서 차량 보기 를 누르면 모달창으로 "엔카의 특정 차량으로 진입합니다."라는 문구를 띄워 가상의 차량으로 이동하는거로
+*/}
+    {isOwner && (
+      <div className={styles.actions}>
+        {forSale ? (
+          <button onClick={handleUnlist}>매물에서 제외</button>
+        ) : (
+          <button onClick={handleMarkForSale}>매물로 등록</button>
+        )}
+      </div>
+    )}
+  </div>
+  <div className={styles.actions}>
+      {showPurchaseButton ? (
+        <button onClick={handlePurchase} disabled={!connected}>
+          {connected ? '구매 요청' : '지갑 연결 필요'}
+        </button>
+      ) : (
         <div>
-          {forSale ? (
-            <button onClick={handleUnlist}> 매물에서 제외</button>
-          ) : (
-            <button onClick={handleMarkForSale}> 매물로 등록</button>
+          <p>거래 요청 상태: <b>{reqStatus}</b></p>
+          {isOwner && isApproved && (
+            <button onClick={handleTrade} disabled={txPending}>
+              {txPending ? '거래 진행 중...' : '거래 실행'}
+            </button>
           )}
         </div>
       )}
-
-      <div>
-        {showPurchaseButton ? (
-          <button onClick={handlePurchase} disabled={!connected}>
-            {connected ? '구매 요청' : '지갑 연결 필요'}
-          </button>
-        ) : (
-          <div>
-            <p>거래 요청 상태: <b>{reqStatus}</b></p>
-            {isOwner && isApproved && (
-              <button onClick={handleTrade} disabled={txPending}>
-                {txPending ? '거래 진행 중...' : '거래 실행'}
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-
-      <hr />
+    </div>
+    <div className={styles.section}>
       <HistoryInput tokenId={vehicle.tokenId} />
       <OwnerHistoryTable histories={ownerHistories} myAddress={account!} />
     </div>
-  );
+  </div>
+);
 };
 
 export default VehicleDetail;

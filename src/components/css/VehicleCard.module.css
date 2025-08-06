@@ -1,0 +1,40 @@
+.vehicles_card {
+    width: calc(20% - 16px);
+    margin: 8px;
+    padding: 16px;
+    border-radius: 10px;
+  }
+  
+  .vehicles_card:hover {
+   cursor:pointer;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .info {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  
+  .actions {
+    margin-top: 12px;
+    text-align: right; 
+  }
+  
+  .detailButton {
+    display:block; 
+    padding: 6px 12px;
+    background-color: #d72e36;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 75px;
+    margin:0 auto;
+    transition: background-color 0.2s ease;
+  }

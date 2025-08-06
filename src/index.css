@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,6 +29,7 @@ time, mark, audio, video {
 	font-family: 'Pretendard';
   text-decoration:none;
   color: #333;
+  font-family: 'Pretendard-Regular', sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -48,7 +57,7 @@ table {
 .clickable_white {
   
   cursor: pointer;
-  border-radius: 20%;
+  border-radius: 8px;
   transition: all .5s ease;
 }
 .clickable_white:hover {
@@ -58,8 +67,13 @@ table {
   cursor: pointer;
   background-color: #e8e8e8;
   transition: all 0.2s ease;
-  border-radius: 20%;
+  border-radius: 8px;
 }
 .clickable_gray:hover {
   background-color: #ccc;
 }
+.nomal_frame {
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding: 10px;
+} 

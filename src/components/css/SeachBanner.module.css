@@ -1,0 +1,26 @@
+.bannerBox {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .title {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #222;
+  }
+  
+  .stats div {
+    margin-bottom: 4px;
+  }
+  
+  .stats strong {
+    color: #111;
+  }
+  

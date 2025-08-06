@@ -7,6 +7,7 @@ import VehicleDetail from '../pages/VehicleDetail';
 import NotFound from '../pages/NotFound';
 import Header from '../components/Header';
 import RequireRole from '../components/RequireRole';
+import Footer from '../components/Footer';
 import { useWallet } from '../contexts/WalletContext';
 import { useRole } from '../contexts/RoleContext';
 
@@ -45,6 +46,7 @@ const AppRouter = () => {
         {/* 잘못된 경로 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 };
