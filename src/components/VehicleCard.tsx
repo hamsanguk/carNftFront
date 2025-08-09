@@ -31,6 +31,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       <div className={styles.info}><strong>민팅일:</strong> {new Date(mintedAt).toLocaleString()}</div>
       <div className={styles.actions}>
         <Link to={`/vehicles/${tokenId}`} className={styles.detailButton}>상세 보기</Link>
+        {/*거래는 currentOwner가 아니라 OnchainOwner만 유효하므로 current 삭제*/}
       </div>
     </div>
   );

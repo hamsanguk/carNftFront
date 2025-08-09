@@ -15,24 +15,57 @@
   }
   
   .banner {
+    display:flex;
     width: 1200px;
-    height: 200px;
     margin: 10px 0 20px 0;
+    justify-content: space-between;
+    
+  }
+  .banner>.bannerImage{
+    height: 120px;
+    width: 80%;
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: 10px -15px;
     background-image: url('/public/images/volkswagonbanner.jpg');
     border-radius:5px;
   }
-  
+  .banner>.login{
+    padding:0;
+    width: 240px;
+    height: 120px;
+  }
+
+  .login>.loginbutton{
+    display:block;
+    width:200px;
+    color: #d72e36;
+    border:1px solid #d72e36; 
+    padding:10px 50px;
+    margin:20px auto;
+    cursor:pointer;
+  }
+
+  .login>ul{
+    display:flex;
+    margin:40px auto 0;
+    justify-content:space-around;
+    width:70%;
+  }
+  .login>ul>li{
+    color:#888;
+    font-size:12px;
+    text-align:center
+  }
+
   .contentWrap {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-wrap: nowrap;
     width: 100%;
   }
   
   .search {
-    width: calc(17% - 10px);
+    width: calc(22% - 10px);
     height: 900px;
     border: 1px solid #aaa;
   }
