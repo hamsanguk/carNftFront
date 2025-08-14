@@ -17,7 +17,7 @@
   .banner {
     display:flex;
     width: 1200px;
-    margin: 10px 0 20px 0;
+    margin: 10px 0 10px 0;
     justify-content: space-between;
     
   }
@@ -65,9 +65,9 @@
   }
   
   .search {
-    width: calc(22% - 10px);
+    width: calc(21% - 10px);
     height: 900px;
-    border: 1px solid #aaa;
+    margin-right: 10px;
   }
   
   .mainPage {

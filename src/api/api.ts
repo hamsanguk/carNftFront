@@ -7,14 +7,17 @@ const API = axios.create({
 });
 
 export interface Vehicle {
-  tokenId: number;
+  tokenId: any;         
   vin: string;
   manufacturer: string;
   ownerDb: string;
-  ownerOnChain: string;
+  ownerOnChain: string | null;
   mintedAt: string;
-  tokenUri?: string;
+  tokenUri?: string | null;         
+  model?: string;                   
+  forSale?: boolean;                 
 }
+
 
 /**
  * VIN 기반 NFT 민팅 요청
@@ -31,10 +34,10 @@ export async function mintVehicle(
 ): Promise<Vehicle> {
   const response = await API.post(
     '/vehicles/mint',
-    { vin, manufacturer, metadataUri },
+    { vin, manufacturer, ownerAddress ,metadataUri },
     { headers: { 'x-owner-address': ownerAddress, 'x-workshop-address': workshopAddress,} },
   );
-  return response.data.vehicle;
+  return response.data?.vehicle;
 }
 
 /**

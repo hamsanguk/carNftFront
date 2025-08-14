@@ -223,3 +223,4 @@ const MintVehicleForm: React.FC<MintVehicleFormProps> = ({
 };
 
 export default MintVehicleForm;
+// 프리픽스를 쓰고있다면, /api/...으로 호출 권장

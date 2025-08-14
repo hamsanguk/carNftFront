@@ -56,9 +56,9 @@ const Workshop = () => {
           <p style={{ color: 'green' }}>관리자 승인된 VIN으로만 민팅할 수 있습니다.</p>
           <MintVehicleForm
             ownerAddress={account || ''}
-            workshopAddress = {account || ''}
-            approved={true}
-            allowedVins={approvedVins} // 폼에서 VIN 선택을 제한할 수 있음
+            workshopAddress={account || ''}
+            approved={approved}                 // 수정: 실제 승인 결과 사용
+            allowedVins={approvedVins}
           />
         </div>
  
