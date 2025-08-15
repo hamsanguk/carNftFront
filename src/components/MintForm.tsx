@@ -26,7 +26,7 @@ const MintForm = () => {
         vin,                // VIN
         manufacturer,       // 제조사
         metadataUri || ''   // 메타데이터 URI (없어도 빈 문자열로 처리)
-      );
+      )
 
       const receipt = await tx.wait();
 
@@ -61,7 +61,7 @@ const MintForm = () => {
   };
 
   return (
-    <div style={{ padding: '1rem', border: '1px solid #ccc' }}>
+    <div>
       <h3>VIN NFT 민팅</h3>
       <input
         placeholder="VIN"

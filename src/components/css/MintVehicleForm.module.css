@@ -1,0 +1,19 @@
+.wrap{
+    border:1px solid red;
+    width:500px;
+}
+.wrap>input{
+    display:block;
+    width:100%;
+    height:28px;
+    font-size: 20px;
+}
+.button{
+    cursor:pointer;
+    border:none;
+    width: 180px;
+    height: 32px;
+    background-color: #888;
+}
+
+  

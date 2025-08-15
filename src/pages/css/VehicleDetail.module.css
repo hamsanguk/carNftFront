@@ -3,6 +3,7 @@
   max-width: 1200px;
   margin: 24px auto 80px;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;    
   gap: 24px;
 }
@@ -195,11 +196,22 @@
 .tradeInfo{
   font-size:13px; color:#444; margin:2px 0 6px;
 }
-
-/* 반응형 */
-@media (max-width: 980px){
-  .wrap{ grid-template-columns: 1fr; }
-  .aside{ position: static; }
-  .optionGrid{ grid-template-columns: repeat(2,1fr); }
-  .thumbRow{ grid-template-columns: 1fr; }
+.policyInfo{
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+.policyInfo>*{
+  background-color: transparent;
+  color: #777;
+}
+.policyInfo>h2{
+  font-size: 30px;
+  line-height: 1.5;
+}
+.policyInfo>p{
+  background-color: transparent;
+  line-height: 1.2;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

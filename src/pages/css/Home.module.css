@@ -68,6 +68,8 @@
     width: calc(21% - 10px);
     height: 900px;
     margin-right: 10px;
+    position:sticky;
+    top:10px;
   }
   
   .mainPage {
@@ -84,9 +86,9 @@
   .sideStickyBanner {
     width: 140px;
     position: sticky;
-    top: 180px;
+    top: 20px;
     flex-shrink: 0;
-    margin-left: 20px;
+    margin-left: 0px;
   }
 .sideStickyBanner>.tImage{
   width: 100%;height: 287px;
@@ -109,12 +111,51 @@
   border-top: 1px solid #aaa;
 }
 .bottom_banner{
-  width: 1200px;
-  height: 240px;
-  background-image: url('/public/images/563f84a8-9172-44d5-81bf-159b1badd68e.png');
-  background-position: 0 492px;
+  width: 66vw;
+  margin-left: calc(-50vw + 50%);
+  height: 300px;
+  background-image: url('/public/images/dodgebanner.png');
+  background-position:-190px -10px;
   background-size: cover;
-  margin:0 auto;
+  background-repeat: no-repeat;
+ position: relative;
+ z-index: 2;
 }
+.bottom_left_banner {
+  height: 150px;
+  width: 66vw;
+  margin-right: calc(-50vw + 12%); /* 화면 오른쪽 붙임 */
+  background: #888;
+ position:absolute;
+ right: 0;
+ margin-top: -300px;
+ transform:skewX(55deg);
+}
+/* 전체 화면을 덮는 반투명 배경 */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 99; /* 페이지 최상단에 오도록 */
+}
+
+
+.modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  max-width: calc(100% - 32px); /* 작은 화면 대응 */
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modalTitle { font-size: 20px; margin: 0 0 12px; }
+.modalBody  { font-size: 14px; line-height: 1.6; }
 
   

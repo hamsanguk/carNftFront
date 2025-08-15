@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { mintVehicle } from '../api/api';
 import { useWallet } from '../contexts/WalletContext';
-import Workshop from '../pages/Workshop';
+import styles from './css/MintVehicleForm.module.css'
 
 const DEFAULT_ATTRS = {
   vin: '',
@@ -124,7 +124,7 @@ const MintVehicleForm: React.FC<MintVehicleFormProps> = ({
   };
 
   return (
-    <div>
+    <div className={styles.wrap}>
       <input
         name="vin"
         placeholder="VIN"
@@ -200,6 +200,7 @@ const MintVehicleForm: React.FC<MintVehicleFormProps> = ({
       <br />
 
       <input
+        className={styles.button}
         type="file"
         accept="image/*"
         onChange={e => setImageFile(e.target.files?.[0] ?? null)}
@@ -208,6 +209,7 @@ const MintVehicleForm: React.FC<MintVehicleFormProps> = ({
       <br />
 
       <button
+        className={styles.button}
         onClick={handleMint}
         disabled={loading || !approved}
         style={{ marginTop: 8 }}

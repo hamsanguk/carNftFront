@@ -4,6 +4,7 @@ import MintVehicleForm from '../components/MIntVehicleForm';
 import MintRequestForm from '../components/MintRequestForm';
 import { mintVehicle, Vehicle } from '../api/api';
 import { useWallet } from '../contexts/WalletContext';
+import styles from "./css/Workshop.module.css";
 import axios from 'axios';
 
 const Workshop = () => {
@@ -49,10 +50,11 @@ const Workshop = () => {
   }, [account]);
 
   return (
-    <div style={{ padding: '1rem' }}>
-     <h2>minting(workshop page)</h2>
+    <div className={styles.wrap}>
     
-        <div>
+    
+        <div className={styles.mintfrom}>
+          <h2>minting(workshop page)</h2>
           <p style={{ color: 'green' }}>관리자 승인된 VIN으로만 민팅할 수 있습니다.</p>
           <MintVehicleForm
             ownerAddress={account || ''}
@@ -62,7 +64,7 @@ const Workshop = () => {
           />
         </div>
  
-        <div>
+        <div className={styles.vinApprove}>
           <p style={{ color: 'orange' }}>아직 관리자 승인 대기 중입니다.<br />아래 폼으로 민팅 요청을 제출하세요.</p>
           <MintRequestForm workshopAddress={account || ''} />
         </div>
