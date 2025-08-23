@@ -3,15 +3,17 @@ import {useIsWorkshopOrAdmin} from '../hooks/useIsWorkshopOrAdmin'
 import React, { useState } from 'react';
 import VehicleHistoryForm from './VehicleHistoryForm';
 import VehicleHistoryList from './VehicleHistoryList';
+import styles from './css/HistoryInput.module.css';
+
 
 const HistoryInput: React.FC<{ tokenId: number }> = ({ tokenId }) => {
     const {provider,account} = useWallet();
     const isAllowed = useIsWorkshopOrAdmin(provider, account);
   const [refetchFlag, setRefetchFlag] = useState(0);
   return (
-    <div>
+    <div className={styles.wrap}>
       <h1>Vehicle #{tokenId}</h1>
-     {/* 이력 등록 권한이 있는 경우에만 폼 보여짐 */}
+     {/* 이력 등록 권한이 있는 경우에만 폼 보여짐*/}
         {isAllowed && (
             <VehicleHistoryForm
             tokenId={tokenId}
@@ -19,7 +21,6 @@ const HistoryInput: React.FC<{ tokenId: number }> = ({ tokenId }) => {
             />
         )}
       <VehicleHistoryList key={refetchFlag} tokenId={tokenId} />
-     
     </div>
   );
 };

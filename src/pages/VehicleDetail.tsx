@@ -205,7 +205,7 @@ const VehicleDetail: React.FC = () => {
     return () => source.cancel();
   }, [vehicle?.tokenId, vehicle?.tokenUri]);
 
-  if (loading) return <div>로딩 중...</div>;
+  if (loading) return <div>찾는 중...</div>;
   if (!vehicle) return <div>차량 정보를 찾을 수 없습니다.</div>;
 
   return (

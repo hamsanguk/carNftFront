@@ -32,18 +32,20 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [isPolicyOpen, setPolicyOpen] = useState(false);
   const [completedTokenIds, setCompletedTokenIds] = useState<Set<number>>(new Set());
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get('filter') || 'all';
   const [histories, setHistories] = useState<VehicleHistory[]>([]);
   const {account, connected, connectWallet, disconnectWallet} = useWallet();
   const [vehicleWithHistoryCount, setVehicleWithHistoryCount] = useState(0);
 
   const KOREAN_BRANDS = ['Hyundai', 'Genesis', 'Kia'];
-
   const visibleVehicles = vehicles.filter(v => !completedTokenIds.has(v.tokenId));
-
   const historyTokenIds = new Set(histories.map(h => h.tokenId));
   const withHistory = visibleVehicles.filter(v => historyTokenIds.has(v.tokenId)).length;
+
+  const PAGE_SIZE = 9;
+  const initialPage = Math.max(1,Number(searchParams.get('page') || 1 ));
+  const [page,setPage] = useState<number>(initialPage);
 
   const totalNft = visibleVehicles.length;
   const waiting = vehicles.length - totalNft;
@@ -53,6 +55,13 @@ const Home = () => {
     if (filter === 'imported') return !KOREAN_BRANDS.includes(v.manufacturer);
     return true;
   });
+
+  const sorted = filteredVehicles.slice().reverse(); // 최신이 먼저
+const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+const currentPage = Math.min(page, totalPages); // 가드
+const start = (currentPage - 1) * PAGE_SIZE;
+const end = start + PAGE_SIZE;
+const pagedVehicles = sorted.slice(start, end);
 
   useEffect(()=>{
     const onKeyDown = (e: KeyboardEvent) => {
@@ -114,6 +123,23 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filter]);
+  
+  // 페이지/필터 → URL 쿼리 반영
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (filter && filter !== 'all') params.filter = filter;
+    if (currentPage > 1) params.page = String(currentPage);
+    setSearchParams(params, { replace: true });
+  }, [filter, currentPage, setSearchParams]);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [totalPages]); 
+
   return (
     <>
       <div className={styles.wrap}>
@@ -153,14 +179,40 @@ const Home = () => {
               <div className={styles.vehicleList}>
                 {loading ? (
                   <div>로딩 중...</div>
-                ) : filteredVehicles.length === 0 ? (
+                ) : sorted.length === 0 ? (
                   <div>해당 조건의 차량이 없습니다.</div>
                 ) : (
-                  filteredVehicles.slice().reverse().map(v => (
-                    <VehicleCard key={v.tokenId} {...v} />
-                  ))
+                  pagedVehicles.map(v => <VehicleCard key={v.tokenId} {...v} />)
                 )}
+               
               </div>
+              {!loading && totalPages > 1 && (
+                  <nav
+                    className={styles.pagination}
+                    role="navigation"
+                    aria-label="Pagination"
+                  >
+                    {Array.from({ length: totalPages }, (_, i) => {
+                      const p = i + 1;
+                      const isActive = p === currentPage;
+                      return (
+                        <div>
+                         
+                        <button
+                          key={p}
+                          type="button"
+                          className={`${styles.bullet} ${isActive ? styles.bulletActive : ''}`}
+                          aria-label={`페이지 ${p}`}
+                          aria-current={isActive ? 'page' : undefined}
+                          onClick={() => setPage(p)}
+                        >
+                          {p}
+                        </button>
+                        </div>
+                      );
+                    })}
+                  </nav>
+                )}
             </div>
           </div>
         </div>
@@ -206,12 +258,9 @@ const Home = () => {
 };
 export default Home;
 {/*
-  home에 사이트 최초진입시 엔카에서 nft등록이 된 차량을 보고 링크를 통해 사용자가 프로젝트에 진입했을 것을 가정하여 상황을 설명하는 모달 만들기*
-    #d72e36
+home에 사이트 최초진입시 엔카에서 nft등록이 된 차량을 보고 링크를 통해 사용자가 프로젝트에 진입했을 것을 가정하여 상황을 설명하는 모달 만들기*
 
-home.tsx에 팝업으로는 사이트를 소개하는 글
-면책조항은 홈에 넣고, vehicleDetail이 휑한데 거기에도 바탕과 비슷한 명도(회색)으로 하단에 적기
-
+home.tsx에 팝업으로는 사이트를 소개하는 글 
 
 [면책 조항:NFT는 개인키 보유자에 의해 지갑 간 직접 전송·거래가 가능합니다. 다만 본 서비스가 안내하는 감독 절차(거래 요청 → 승인 → 컨트랙트 실행 )
 를 거치지 않고 이루어진 직접 전송은 서비스 범위를 벗어난 거래로 간주되며, 이로 인한 손실·분쟁에 대해서는 지원 또는 책임을 지기 어렵습니다. 
@@ -220,16 +269,14 @@ home.tsx에 팝업으로는 사이트를 소개하는 글
 ]
 
   [엔카와의 관계설명:해당 사이트에서 진행되는 거래는 법적으로 정상적으로 진행되는 거래 도중, 거래 완료 후에 진행해주세요,]
-
 [사이트 안내: 본 NFt는 자동차 소유권,등록증,담보권등의 법적 권리를 데체할 수 없으며, 변조없는 무결성을 보장 할 디지털 증표입니다
 ]
-
-    사이트 상단 메인배너 쪼게서 로그인 Ui 빨간색으로 구현하기
-     차량 토큰이 많아졌을때를 대비해서 한 페이지에는 16개만 표시하기
-    이용하는 입장에서 판매를 원할때는 어떻게?: 계정으로 민팅을 하고 받고 나서
-    그러면 자동으로 매물이 등록되지 (차량이 거래가 이루어진 이후 차량을 목록에서 내릴 수 가 있어야 되고
-    이런 관리는 어드민이)
-    프로젝트에 사진을 넣지 않은 이유는 프로젝트의 각 nft는 엔카 사이트의 nft등록 차량이라고 메인사이트에 표시가
-    되어있다. 프로젝트에 있는 nft는 가상의 차량으로 
-    엔카와연결되어 있다는 의미로 detailpage에 엔카에서 보기 ui 링크만표시 alert로 "엔카로 이동합니다"라고 명시만
-    */}
+  사이트 상단 메인배너 쪼게서 로그인 Ui 빨간색으로 구현하기
+  차량 토큰이 많아졌을때를 대비해서 한 페이지에는 16개만 표시하기
+  이용하는 입장에서 판매를 원할때는 어떻게?: 계정으로 민팅을 하고 받고 나서
+  그러면 자동으로 매물이 등록되지 (차량이 거래가 이루어진 이후 차량을 목록에서 내릴 수 가 있어야 되고
+  이런 관리는 어드민이)
+  프로젝트에 사진을 넣지 않은 이유는 프로젝트의 각 nft는 엔카 사이트의 nft등록 차량이라고 메인사이트에 표시가
+  되어있다. 프로젝트에 있는 nft는 가상의 차량으로 
+  엔카와연결되어 있다는 의미로 detailpage에 엔카에서 보기 ui 링크만표시 alert로 "엔카로 이동합니다"라고 명시만
+*/}

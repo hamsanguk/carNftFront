@@ -22,19 +22,34 @@ const shortenAddress = (addr: string|null)=>{
 }
 
 const VehicleCard: React.FC<VehicleCardProps> = ({vin, manufacturer ,tokenId, ownerDb, ownerOnChain, mintedAt, tokenUri,}) => {
+ 
   const [model,setModel]=useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-useEffect(() => {
+  const ipfsToHttp = (uri: string) =>
+    uri.startsWith('ipfs://') ? `https://ipfs.io/ipfs/${uri.replace('ipfs://', '')}` : uri;
+
+  useEffect(() => {
     let cancelled = false;
     const load = async () => {
-      if (!tokenUri) return;
       try {
         const res = await axios.get(`${API_BASE}/metadata`, {
-          params: { token_id: String(tokenId), token_uri: tokenUri },
+          params: { token_id: String(tokenId), token_uri: tokenUri ?? '' },
         });
-        if (!cancelled) setModel(res.data?.model || '');
-      } catch {
-        if (!cancelled) setModel('');
+        if (!cancelled) {
+          setModel(res.data?.model || '');
+          if (res.data?.image) setImageUrl(res.data.image);
+        }
+      } catch { /* 무시 */ }
+  
+      if (!imageUrl && tokenUri) {
+        try {
+          const metaUrl = ipfsToHttp(tokenUri);
+          const res2 = await axios.get(metaUrl);
+          const meta = res2.data || {};
+          const img = meta.image || meta.image_ipfs;
+          if (!cancelled && img) setImageUrl(ipfsToHttp(img));
+        } catch { /* 무시 */ }
       }
     };
     load();
@@ -44,6 +59,11 @@ useEffect(() => {
   return (
     <div>
       <div className={styles.vehicles_card}>
+      {imageUrl ? (
+      <img className={styles.thumbnail} src={imageUrl} alt="차량 이미지" />
+    ) : (
+      <div className={styles.thumbnailPlaceholder} />
+    )}
       <h3 className={styles.title}>{manufacturer}</h3>
       <div className={styles.info}><strong>Model:</strong>{model}</div>
       <div className={styles.info}><strong>VIN:</strong> {vin}</div>

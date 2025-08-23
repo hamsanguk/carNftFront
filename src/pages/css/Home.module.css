@@ -115,7 +115,7 @@
   margin-left: calc(-50vw + 50%);
   height: 300px;
   background-image: url('/public/images/dodgebanner.png');
-  background-position:-190px -10px;
+  background-position:-290px -10px;
   background-size: cover;
   background-repeat: no-repeat;
  position: relative;
@@ -125,7 +125,7 @@
   height: 150px;
   width: 66vw;
   margin-right: calc(-50vw + 12%); /* 화면 오른쪽 붙임 */
-  background: #888;
+  background: #d72e36;
  position:absolute;
  right: 0;
  margin-top: -300px;

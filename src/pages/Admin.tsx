@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import MintVehicleForm from '../components/MIntVehicleForm'
 import axios from 'axios';
+import styles from './css/Admin.module.css'
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -22,8 +23,7 @@ type MintRequest = {
   status: string;
   createdAt: string;
 }
-//나도 이제는 정신차리고 이력서 어플라이를 진행하면서 면접을 간보고 경험하고, 인간답게
-//살아야 되는데 CreonExpression
+
 const Admin = () => {
   const [requests, setRequests] = useState<TradeRequest[]>([]);
   const [mintRequests, setMintRequests] = useState<MintRequest[]>([]);
@@ -100,7 +100,7 @@ const Admin = () => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div className={styles.wrap}>
        <h2>워크샵 차량 민팅 요청 승인</h2>
       {loading ? (
         <div>로딩 중...</div>
@@ -186,14 +186,13 @@ const Admin = () => {
       )}
       <h2>관리자용 차량 민팅</h2>
       <MintVehicleForm ownerAddress = {account || ''} approved={true}/>
-      <button onClick={handleManualIndexing}>수동 인덱싱</button>
+      <div className={styles.rightside}>
+         <button onClick={handleManualIndexing}>수동 인덱싱</button>
+      </div>
     </div>
   );
 };
 
 export default Admin;
 //지금 프로젝트에 적용된 폴링이 어떻게돌아가는지 이해 하기 
-//자동화와 수동을 동시에 가져가는 것이 좋겠다. 수동으로 동작시킬때는 범위를 지정하는 ui와 특정 토큰을 지장할 수 있는 ui를 만들어야지 
-//마지막 블록이 어디에 저장이 되나요? / db에 저장이 되것지?
 //페이지를 하나 더 만들기 내 차량 관리 페이지[home에 노출되는 나의 차량을 제외하거나, 다시 불러와서 노출 시킬수가 있다]
-//admin에 수동 폴링 ui만들기

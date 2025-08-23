@@ -26,6 +26,22 @@ strong{
     font-weight:bold;
   }
   
+  .thumbnail {
+    width: 180px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .thumbnailPlaceholder {
+    width: 180px;
+    height: 80px;
+    border-radius: 8px;
+    background: #aaa; /* 회색 블록 */
+    margin-bottom: 10px;
+  }
+
   .actions {
     margin-top: 12px;
     text-align: right; 

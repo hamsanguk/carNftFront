@@ -1,0 +1,9 @@
+.wrap>form{
+    background-color: #fff;
+}
+.wrap>*{
+    background-color:#fff;
+}
+.wrap>form>*{
+    background-color:#fff;
+}

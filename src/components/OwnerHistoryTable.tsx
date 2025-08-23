@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './css/OwnerHistoryTable.module.css'
 
 interface OwnerHistory {
   ownerAddress: string;
@@ -25,7 +26,7 @@ const OwnerHistoryTable: React.FC<Props> = ({ histories, myAddress }) => {
     return <p>소유주 이력이 없습니다. (민팅이 안 된 토큰이거나 인덱싱 필요)</p>;
 
   return (
-    <table border={1} cellPadding={8} style={{ marginTop: '1rem', width: '100%' }}>
+    <table className={styles.table}>
       <thead>
         <tr>
           <th>순번</th>
@@ -50,7 +51,7 @@ const OwnerHistoryTable: React.FC<Props> = ({ histories, myAddress }) => {
               {h.ownerAddress.slice(0, 6)}...{h.ownerAddress.slice(-4)}
               {myAddress &&
                 h.ownerAddress.toLowerCase() === myAddress.toLowerCase() &&
-                ' (me)'}
+                '(me)'}
             </td>
             <td>
               {formatDate(h.startTimestamp)} ~ {formatDate(h.endTimestamp)}
