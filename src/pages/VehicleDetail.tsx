@@ -10,7 +10,13 @@ import OwnerHistoryTable from '../components/OwnerHistoryTable';
 import { Vehicle } from '../api/api';
 import styles from './css/VehicleDetail.module.css';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000',
+EXPLORER_BASE = process.env.REACT_APP_EXPLORER_URL || 'https://kairos.kaiascan.io/nft';
+
+const buildExpolorerUrl = (ca: string, tokenId: number)=>{
+  if(!ca || tokenId === undefined || tokenId === null) return '';
+  return `${EXPLORER_BASE}/${ca}/${tokenId}?tabId=nftTokenTransfer&page=1`;
+}
 
 type TradeRequest = {
   id: string;
@@ -36,6 +42,12 @@ const VehicleDetail: React.FC = () => {
 
   const location = useLocation();
   const navState = (location.state ?? null) as { model?: string; tokenUri?: string } | null;
+
+  const handleOpenExplorer =()=>{
+    const url = buildExpolorerUrl(CONTRACT_ADDRESS, vehicle?.tokenId);
+    if(!url) return;
+    window.open(url,'_blank');
+  }
 
   // 차량 기본 정보 조회
   useEffect(() => {
@@ -253,7 +265,14 @@ const VehicleDetail: React.FC = () => {
             <small className={styles.sub}>보증/이력은 블록체인으로 검증</small>
           </div>
           <OwnerHistoryTable histories={ownerHistories} myAddress={account ?? ''} />
-<button className={styles.encar_link}>엔카에서 보기</button>
+  <button className={`${styles.encar_link}`}>엔카에서 보기</button>
+  <button
+  type="button"
+  className={styles.encar_link}  onClick={handleOpenExplorer}
+  disabled={!vehicle?.tokenId}
+>
+  익스플로러에서 보기
+</button>
 
 {/* 소유자 화면 */}
 {isOwner ? (
