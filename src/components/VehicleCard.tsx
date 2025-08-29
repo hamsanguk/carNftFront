@@ -55,7 +55,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({vin, manufacturer ,tokenId, ow
     load();
     return () => { cancelled = true; };
   }, [tokenId, tokenUri]);
-
+  
   return (
     <div>
       <div className={styles.vehicles_card}>

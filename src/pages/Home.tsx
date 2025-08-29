@@ -187,17 +187,12 @@ const pagedVehicles = sorted.slice(start, end);
                
               </div>
               {!loading && totalPages > 1 && (
-                  <nav
-                    className={styles.pagination}
-                    role="navigation"
-                    aria-label="Pagination"
-                  >
+                <nav className={styles.pagination} role="navigation" aria-label="Pagination">
+                  <div className={styles.pageButtons}>
                     {Array.from({ length: totalPages }, (_, i) => {
                       const p = i + 1;
                       const isActive = p === currentPage;
                       return (
-                        <div>
-                         
                         <button
                           key={p}
                           type="button"
@@ -208,11 +203,11 @@ const pagedVehicles = sorted.slice(start, end);
                         >
                           {p}
                         </button>
-                        </div>
                       );
                     })}
-                  </nav>
-                )}
+                  </div>
+                </nav>
+              )}
             </div>
           </div>
         </div>
@@ -259,8 +254,6 @@ const pagedVehicles = sorted.slice(start, end);
 export default Home;
 {/*
 home에 사이트 최초진입시 엔카에서 nft등록이 된 차량을 보고 링크를 통해 사용자가 프로젝트에 진입했을 것을 가정하여 상황을 설명하는 모달 만들기*
-
-home.tsx에 팝업으로는 사이트를 소개하는 글 
 
 [면책 조항:NFT는 개인키 보유자에 의해 지갑 간 직접 전송·거래가 가능합니다. 다만 본 서비스가 안내하는 감독 절차(거래 요청 → 승인 → 컨트랙트 실행 )
 를 거치지 않고 이루어진 직접 전송은 서비스 범위를 벗어난 거래로 간주되며, 이로 인한 손실·분쟁에 대해서는 지원 또는 책임을 지기 어렵습니다. 

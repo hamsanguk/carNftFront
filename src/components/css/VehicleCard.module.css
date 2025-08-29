@@ -2,11 +2,10 @@ strong{
   color:#888;
 }
 .vehicles_card {
-    width: calc(100% - 16px);
+    width: 258px;
     margin: 8px;
     padding: 16px;
-    border-radius: 10px;
-  }
+    border-radius: 10px;  }
   
   .vehicles_card:hover {
    cursor:pointer;
@@ -25,21 +24,21 @@ strong{
     color: #333;
     font-weight:bold;
   }
-  
-  .thumbnail {
-    width: 180px;
+  .thumbnail,.thumbnailPlaceholder {
+    width: 200px;
     height: 80px;
+    border-radius: 8px;
+    margin: 10px auto 20px;
+  }
+  .thumbnail {
     object-fit: cover;
     border-radius: 8px;
-    margin-bottom: 10px;
+    display:block;
   }
   
   .thumbnailPlaceholder {
-    width: 180px;
-    height: 80px;
     border-radius: 8px;
-    background: #aaa; /* 회색 블록 */
-    margin-bottom: 10px;
+    background: #bbb; 
   }
 
   .actions {

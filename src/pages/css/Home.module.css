@@ -79,10 +79,23 @@
   .vehicleList {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: fle;
     row-gap: 20px;
   }
   
+  .pageButtons {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .pageButtons>button {
+    display:block;
+    width:30px;
+    padding: 6px 12px;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
   .sideStickyBanner {
     width: 140px;
     position: sticky;
