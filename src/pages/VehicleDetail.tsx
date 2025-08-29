@@ -42,6 +42,16 @@ const VehicleDetail: React.FC = () => {
 
   const location = useLocation();
   const navState = (location.state ?? null) as { model?: string; tokenUri?: string } | null;
+  
+  const fetchOwnerHistories = async (id: string | number) => {
+    try {
+      const res = await axios.get(`${API_BASE}/ownership-history/${id}`);
+      setOwnerHistories(res.data);
+    } catch (err) {
+      console.error('Error fetching owner history:', err);
+      setOwnerHistories([]);
+    }
+  };
 
   const handleOpenExplorer =()=>{
     const url = buildExpolorerUrl(CONTRACT_ADDRESS, vehicle?.tokenId);
@@ -64,11 +74,8 @@ const VehicleDetail: React.FC = () => {
 
   // 소유 이력 조회
   useEffect(() => {
-    if (!tokenId) return;
-    axios
-      .get(`${API_BASE}/ownership-history/${tokenId}`)
-      .then((res) => setOwnerHistories(res.data))
-      .catch((err) => console.error('Error fetching owner history:', err));
+    if(!tokenId)  return;
+    fetchOwnerHistories(tokenId);
   }, [tokenId]);
 
   // 내 지갑이 소유자인지 여부
@@ -179,6 +186,7 @@ const VehicleDetail: React.FC = () => {
 
       alert('처리가 완료되었습니다.');
       setTradeReq((prev) => (prev ? { ...prev, status: 'completed' } : prev));
+      await fetchOwnerHistories(vehicle.tokenId);
     } catch (err) {
       console.error(err);
       alert('거래 처리 중 오류가 발생했습니다.');
@@ -236,7 +244,6 @@ const VehicleDetail: React.FC = () => {
             <span className={`${styles.badge} ${styles.badgeDark}`}>소유/거래 이력 조회</span>
           </div>
         </header>
-
         <section className={styles.section}>
           <h3>이 차량을 추천하는 이유</h3>
           <p className={styles.note}>
@@ -264,7 +271,7 @@ const VehicleDetail: React.FC = () => {
             <strong className={styles.price}>가격 정보 준비중</strong>
             <small className={styles.sub}>보증/이력은 블록체인으로 검증</small>
           </div>
-          <OwnerHistoryTable histories={ownerHistories} myAddress={account ?? ''} />
+          <OwnerHistoryTable histories={ownerHistories} myAddress={(account ?? '').toLowerCase()} />
   <button className={`${styles.encar_link}`}>엔카에서 보기</button>
   <button
   type="button"
