@@ -145,7 +145,7 @@ const Admin = () => {
         </table>
       )}
       
-      <h2>구매 요청 관리</h2>
+      <h2>차량 인수 요청 관리</h2>
       {loading ? (
         <div>로딩 중...</div>
       ) : requests.length === 0 ? (

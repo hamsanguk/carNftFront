@@ -121,7 +121,7 @@ const VehicleDetail: React.FC = () => {
         token_id: tokenId,
         requester: account,
       });
-      alert('구매 요청이 전송되었습니다.');
+      alert('이전 요청이 전송되었습니다.');
 
       const res = await axios.get(`${API_BASE}/trade/request`, {
         params: { token_id: tokenId, requester: account },
@@ -310,7 +310,7 @@ const VehicleDetail: React.FC = () => {
   <div className={styles.actionGroup}>
     {showPurchaseButton ? (
       <button onClick={handlePurchase} disabled={!connected}>
-        {connected ? '구매 요청' : '지갑 연결 필요'}
+        {connected ? '이전 요청' : '지갑 연결 필요'}
       </button>
     ) : (
       <>
