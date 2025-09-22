@@ -1,6 +1,7 @@
 # Vehicle NFT 프로젝트
-
-### https://car-nft-front.vercel.app/
+### 백엔드 소스:https://github.com/hamsanguk/carNftBack
+### 스마트 컨트랙트 소스:
+### 프로젝트 url:https://car-nft-front.vercel.app/
 
 - 사이트 진입 최초에는 서버가 휴면 상태여서 응답시간이 깁니다.
 - 처음 응답을 받고나면 이후 요청들은 대기시간이 짧아집니다.
