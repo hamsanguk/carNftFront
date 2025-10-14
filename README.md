@@ -67,7 +67,7 @@ function grantWorkshop(address account) external onlyOwner
 - 정비 이력은 JSON 형태로 IPFS(Pinata)에 업로드되며, 내부에 `tokenId`가 포함되어 연결됩니다.
 - DB를 별도로 사용하지 않고, 프론트엔드에서 tokenId 기준으로 IPFS 메타데이터를 조회합니다.
 
-예시 JSON (IPFS 업로드 내용):
+NFT오픈마켓에서 나타날JSON 예시  (IPFS 업로드 내용):
 
 ```json
 {
