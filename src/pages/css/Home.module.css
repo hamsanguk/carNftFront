@@ -77,10 +77,9 @@
   }
   
   .vehicleList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: fle;
-    row-gap: 20px;
+     display: grid;
+     gap: 20px;           
+     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   
   .pageButtons {
@@ -170,5 +169,49 @@
 
 .modalTitle { font-size: 20px; margin: 0 0 12px; }
 .modalBody  { font-size: 14px; line-height: 1.6; }
+/* 버튼/헤더 정렬 */
+.mainHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.refreshBtn { padding: 6px 12px; }
+
+/* 에러 박스 */
+.errorBox { padding: 10px; background: #fff3f3; border: 1px solid #ffd6d6; color: #a33; }
+.linkBtn { background: none; border: none; color: #06c; text-decoration: underline; cursor: pointer; }
+
+/* 스켈레톤 애니메이션 */
+@keyframes shine {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.skelCard {
+  border: 1px solid #eaeaea;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skelThumb {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  background: #eee;
+  background-image: linear-gradient(90deg, #eee 0px, #f5f5f5 40px, #eee 80px);
+  background-size: 200px 100%;
+  animation: shine 5s infinite linear;
+}
+
+.skelLine, .skelLineShort {
+  height: 14px;
+  border-radius: 6px;
+  background: #eee;
+  background-image: linear-gradient(90deg, #eee 0px, #f5f5f5 40px, #eee 80px);
+  background-size: 200px 100%;
+  animation: shine 1.2s infinite linear;
+}
+.skelLine { width: 80%; }
+.skelLineShort { width: 50%; }
+
 
   

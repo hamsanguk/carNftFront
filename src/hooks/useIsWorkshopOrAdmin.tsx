@@ -1,4 +1,3 @@
-// src/hooks/useIsWorkshopOrAdmin.ts
 import { useEffect, useState } from 'react';
 import { Contract, BrowserProvider } from 'ethers';
 import vehicleNftAbi from '../abi/VehicleNFT.json'
