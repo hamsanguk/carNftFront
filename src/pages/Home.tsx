@@ -1,6 +1,3 @@
-// src/pages/Home.tsx
-//skelletonUi 완료되면 서버요청 복구하기
-
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,7 +7,7 @@ import { useWallet } from '../contexts/WalletContext';
 import { withMinDuration } from '../utils/net';
 import styles from './css/Home.module.css';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE = process.env.REACT_APP_API_URL || "https://carnftback.onrender.com" ||'http://localhost:3000';
 const PAGE_SIZE = 9;
 const KOREAN_BRANDS = ['Hyundai', 'Genesis', 'Kia'];
 const MIN_SKELETON_MS = Number(process.env.REACT_APP_MIN_SKELETON_MS ?? 0);
@@ -35,13 +32,16 @@ function SkeletonGrid({ count }: { count: number }) {
         <div key={i} className={styles.skelCard} aria-hidden="true">
           <div className={styles.skelThumb} />
           <div className={styles.skelLine} />
-          <div className={styles.skelLineShort} />
+          <div className={styles.skelLine} />
+          <div className={styles.skelLine} />
+          <div className={styles.skelLine} />
+          <div className={styles.skelButton} />
         </div>
       ))}
     </div>
   );
 }
-
+//--------------------------------
 const Home = () => {
   // wallet
   const { account, connected, connectWallet, disconnectWallet } = useWallet();
@@ -85,7 +85,7 @@ const Home = () => {
     setErrorMsg(null);
 
     const job = (async () => {
-      // 콜드스타트 깨우기(있으면 사용)
+      // 콜드스타트 깨우기
       try {
         await axios.get(`${API_BASE}/health`, { timeout: 5000 });
       } catch {
@@ -103,7 +103,7 @@ const Home = () => {
       const tokenSet = new Set<number>(tradesRes.data.map((req: any) => Number(req.token_id)));
       setCompletedTokenIds(tokenSet);
 
-      // 히스토리 존재 여부 카운트(표시용)
+      // 히스토리 존재 여부 카운트 (표시용)
       const visible = vehicleList.filter((v) => !tokenSet.has(v.tokenId));
       const results = await Promise.all(
         visible.map(async (v: Vehicle) => {
@@ -131,8 +131,7 @@ const Home = () => {
     fetchData();
   }, [fetchData]);
 
-  // ---------- Derived ----------
-  const visibleVehicles = useMemo(
+  const visibleVehicles = useMemo( 
     () => vehicles.filter((v) => !completedTokenIds.has(v.tokenId)),
     [vehicles, completedTokenIds]
   );
@@ -261,7 +260,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 사이드 배너 */}
+        {/* 사이드 배너*/}
         <div className={styles.sideStickyBanner}>
           <div className={styles.tImage}></div>
           <ul className={`${styles.bUi} nomal_frame`}>
